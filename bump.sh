@@ -22,6 +22,10 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 chmod +x ./kubectl
 mkdir ~/.kube/
 
+echo "Installing jq..."
+apt-get update -y && apt-get install -y jq
+jq --version
+
 echo "Installing rancher-projects..."
 wget -O ./rancher-projects.sh https://raw.githubusercontent.com/SupportTools/rancher-projects/main/rancher-projects.sh
 chmod +x ./rancher-projects.sh
