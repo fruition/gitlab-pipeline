@@ -27,7 +27,7 @@ wget -O ./rancher-projects.sh https://raw.githubusercontent.com/SupportTools/ran
 chmod +x ./rancher-projects.sh
 
 echo "Settings up project, namespace, and kubeconfig"
-./rancher-projects \
+./rancher-projects.sh \
 --cluster-name ${cluster} \
 --project-name ${project} \
 --namespace ${namespace} \
