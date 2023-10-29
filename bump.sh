@@ -23,7 +23,7 @@ chmod +x ./kubectl
 mkdir ~/.kube/
 
 echo "Installing rancher-projects..."
-curl -LO https://raw.githubusercontent.com/SupportTools/rancher-projects/main/rancher-projects.sh
+wget -O ./rancher-projects.sh https://raw.githubusercontent.com/SupportTools/rancher-projects/main/rancher-projects.sh
 chmod +x ./rancher-projects.sh
 
 echo "Settings up project, namespace, and kubeconfig"
