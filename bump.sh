@@ -27,7 +27,7 @@ curl -LO https://raw.githubusercontent.com/SupportTools/rancher-projects/main/ra
 chmod +x ./rancher-projects.sh
 
 echo "Settings up project, namespace, and kubeconfig"
-rancher-projects \
+./rancher-projects \
 --cluster-name ${cluster} \
 --project-name ${project} \
 --namespace ${namespace} \
