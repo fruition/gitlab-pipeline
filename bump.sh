@@ -22,8 +22,14 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 chmod +x ./kubectl
 mkdir ~/.kube/
 
-echo "Installing jq..."
-apt-get update -y && apt-get install -y jq
+echo "Downloading jq 1.6 binary to the home directory..."
+wget -O ~/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+chmod +x ~/jq
+
+echo "Adding jq to the PATH for the current session..."
+export PATH=$PATH:~/jq
+
+echo "jq 1.6 installed and added to PATH."
 jq --version
 
 echo "Installing rancher-projects..."
@@ -47,6 +53,8 @@ then
   echo "Problem connecting to the cluster"
   exit 1
 fi
+
+./kubectl get nodes -o wide
 
 echo "Bumping the deployment..."
 ./kubectl -n ${namespace} rollout restart deployment web
