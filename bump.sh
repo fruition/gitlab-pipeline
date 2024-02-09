@@ -16,6 +16,10 @@ if [ -z "${namespace}" ]; then
   echo "Namespace name is not set"
   exit 1
 fi
+if [ -z "${deployment}" ]; then
+  echo "Deployment name is not set, defaulting to 'web'"
+  deployment="web"
+fi
 
 echo "Installing kubectl..."
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -54,12 +58,29 @@ then
   exit 1
 fi
 
-./kubectl get nodes -o wide
+./kubectl --insecure-skip-tls-verify get nodes -o wide
 
-echo "Bumping the deployment..."
-./kubectl -n ${namespace} rollout restart deployment web
+if ! ./kubectl --insecure-skip-tls-verify get namespace ${namespace}
+then
+  echo "Namespace not found"
+  exit 1
+fi
+
+if ! ./kubectl --insecure-skip-tls-verify get deployment ${deployment} -n ${namespace}
+then
+  echo "Deployment not found"
+  exit 1
+fi
+
+if [ -z "${image}" ]; then
+  echo "Bumping the deployment..."
+  ./kubectl --insecure-skip-tls-verify -n ${namespace} rollout restart deployment ${deployment}
+else
+  echo "Bumping the deployment with the image: ${image}..."
+  ./kubectl --insecure-skip-tls-verify -n ${namespace} set image deployment/${deployment} ${deployment}=${image}
+fi
 
 echo "Waiting for the deployment to complete..."
-./kubectl -n ${namespace} rollout status deployment web
+./kubectl --insecure-skip-tls-verify -n ${namespace} rollout status deployment ${deployment}
 
 echo "Deployment complete"
